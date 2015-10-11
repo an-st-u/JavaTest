@@ -1,0 +1,71 @@
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+
+public class Server {
+
+    private static ServerSocket skt;
+
+
+
+    public static void main(String[] args) {
+        int serverPort = 12345; // порт
+        String address = "127.0.0.1";
+        int i=3;
+
+        try {
+            skt = new ServerSocket(serverPort);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            Socket socket = skt.accept();
+            //String s="";
+            socket.getInputStream();
+            OutputStream outputStream= socket.getOutputStream();
+            i=count(i);
+            outputStream.write("hello_world\n".getBytes());
+            
+// вроде как переменную i пересылаем
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int count(int a) {
+        String first;
+        int b;
+
+        NOD(String c) {
+            {
+                first = c;
+                String[] s = first.split(",");
+                a = Integer.parseInt(s[0], 10);
+                b = Integer.parseInt(s[1], 10);
+            }
+        int alNOD () {
+            while (a != b) {
+
+                if (a > b) {
+                    a = a - b;
+                } else {
+                    b = b - a;
+
+                }
+            }
+            return a;
+        }
+        }
+    }
+
+}
