@@ -28,9 +28,7 @@ public class Server {
 
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String G = bufferedReader.readLine();
-
-            NOD up = new NOD(G);
+            NOD up = new NOD(bufferedReader.readLine());
 
             outputStream.write(("НОД = " + up.alNOD()+"\n").getBytes());
 
