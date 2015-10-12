@@ -1,19 +1,15 @@
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
+import java.util.Scanner;
 
 public class Server {
 
     private static ServerSocket skt;
 
-
-
     public static void main(String[] args) {
         int serverPort = 12345; // порт
         String address = "127.0.0.1";
-        int i=3;
 
         try {
             skt = new ServerSocket(serverPort);
@@ -24,13 +20,20 @@ public class Server {
 
         try {
             Socket socket = skt.accept();
-            //String s="";
-            socket.getInputStream();
-            OutputStream outputStream= socket.getOutputStream();
-            i=count(i);
-            outputStream.write("hello_world\n".getBytes());
-            
-// вроде как переменную i пересылаем
+            InputStream inputStream = socket.getInputStream();
+
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write(("Введите 2 числа\n").getBytes());
+
+
+            InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String G = bufferedReader.readLine();
+
+            NOD up = new NOD(G);
+
+            outputStream.write(("НОД = " + up.alNOD()+"\n").getBytes());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,31 +44,4 @@ public class Server {
             e.printStackTrace();
         }
     }
-
-    public static int count(int a) {
-        String first;
-        int b;
-
-        NOD(String c) {
-            {
-                first = c;
-                String[] s = first.split(",");
-                a = Integer.parseInt(s[0], 10);
-                b = Integer.parseInt(s[1], 10);
-            }
-        int alNOD () {
-            while (a != b) {
-
-                if (a > b) {
-                    a = a - b;
-                } else {
-                    b = b - a;
-
-                }
-            }
-            return a;
-        }
-        }
-    }
-
 }
