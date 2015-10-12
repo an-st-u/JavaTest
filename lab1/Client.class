@@ -1,33 +1,35 @@
-/**
- * Created by 207 on 01.10.2015.
- */
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
 public class Client {
 
-        public static void main(String[] args) {
-            int serverPort = 12345; // порт
-            String address = "127.0.0.1"; // IP-адрес компьютера, исполняется серверная программа.
-            // Здесь указан адрес того самого компьютера где будет исполняться и клиент.
-            try {
-                Socket socket = new Socket(address, serverPort);
-                socket.getOutputStream();
-                InputStream inputStream = socket.getInputStream();
-                InputStreamReader  inputStreamReader= new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    public static void main(String[] args) {
+        int serverPort = 12345; // порт
+        String address = "127.0.0.1"; // IP-адрес компьютера, исполняется серверная программа.
+        // Здесь указан адрес того самого компьютера где будет исполняться и клиент.
+        try {
+            Socket socket = new Socket(address, serverPort);
 
-                Scanner scanner = new Scanner(System.in);
-                String stroka = scanner.next();
-                System.err.println(bufferedReader.readLine());
+            InputStream inputStream = socket.getInputStream();
+            InputStreamReader  inputStreamReader= new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.err.println(bufferedReader.readLine());
 
+
+            Scanner cin = new Scanner(System.in);
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write((cin.nextLine()+"\n").getBytes());
+
+            System.err.println(bufferedReader.readLine());
+            
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+    }
+
 }
-
-
