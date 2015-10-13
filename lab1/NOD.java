@@ -1,25 +1,19 @@
 import java.util.List;
-import java.lang.Math;
 import java.lang.String;
-
-import static java.lang.Integer.parseInt;
 
 public class NOD {
 
-    String first;
-    Double[] second;
-    List <Double> third;
     int a,b;
 
-    NOD(String c){
-        first=c;
+    NOD(String first){
+
         String[] s = first.split(",");
         a=Integer.parseInt(s[0],10);
         b=Integer.parseInt(s[1],10);
     }
 
     NOD(Double[] c){
-        second=c;
+
         double buf;
         buf=c[0];
         a=(int)buf;
@@ -28,12 +22,15 @@ public class NOD {
     }
 
     NOD(List <Double> c){
-        third=c;
+
+        String[] s;
+        s=(String[])c.toArray();
+        a=Integer.parseInt(s[0],10);
+        b=Integer.parseInt(s[1],10);
 
     }
 
-
-    int alNOD() {
+    int getResults() {
 
         while (a!=b) {
 
