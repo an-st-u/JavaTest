@@ -1,43 +1,54 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Server {
 
-    private static ServerSocket skt;
+    private static ServerSocket sockets;
 
     public static void main(String[] args) {
         int serverPort = 12345; // порт
-        String address = "127.0.0.1";
 
         try {
-            skt = new ServerSocket(serverPort);
+            sockets = new ServerSocket(serverPort); /*Сокета  сервера ожидает
+                                                      ожидает запрос от клиента*/
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //Если порт занят
         }
 
 
         try {
-            Socket socket = skt.accept();
-            InputStream inputStream = socket.getInputStream();
+            System.out.println("Сервер ожидает подключения");
+            Socket socket = sockets.accept(); /*Экземпляр класса
+                                                Ожидает подключения к sockets*/
 
-            OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(("Введите 2 числа\n").getBytes());
+            System.out.println("Клиент установил подключение");
 
+            InputStream inputStream = socket.getInputStream();    //Входящий поток данных
+            OutputStream outputStream = socket.getOutputStream(); //Исходящий
+            //Возвращают поток байт
+
+            outputStream.write(("Vvedite 2 chisla\n").getBytes());
 
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
+            //Работа с входными потоком данных как со строками
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            NOD up = new NOD(bufferedReader.readLine());
+            //Буферизирует символы и позволяет извлекать как строки, так и символы
 
-            outputStream.write(("НОД = " + up.alNOD()+"\n").getBytes());
+            String get=bufferedReader.readLine();
+            System.out.println("Было получено: "+ get);
+            NOD up = new NOD(get);
+
+            outputStream.write(("NOD = " + up.getResults() + "\n").getBytes());
+            outputStream.close();
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
