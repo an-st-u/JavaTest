@@ -1,47 +1,43 @@
 import java.util.List;
 import java.lang.String;
+public class NOD implements Result{
+    int a, b;
 
-public class NOD {
-
-    int a,b;
-
-    NOD(String first){
-
+    NOD(String first) {
         String[] s = first.split(",");
-        a=Integer.parseInt(s[0],10);
-        b=Integer.parseInt(s[1],10);
+        a = Integer.parseInt(s[0], 10);
+        b = Integer.parseInt(s[1], 10);
     }
 
-    NOD(Double[] c){
-
+    NOD(Double ... c) {
         double buf;
-        buf=c[0];
-        a=(int)buf;
-        buf=c[1];
-        b=(int)buf;
+        buf = c[0];
+        a = (int) buf;
+        buf = c[1];
+        b = (int) buf;
     }
 
-    NOD(List <Double> c){
-
+    NOD(List<Double> c) {
         String[] s;
-        s=(String[])c.toArray();
-        a=Integer.parseInt(s[0],10);
-        b=Integer.parseInt(s[1],10);
-
+        s = (String[]) c.toArray();
+        a = Integer.parseInt(s[0], 10);
+        b = Integer.parseInt(s[1], 10);
     }
 
-    int getResults() {
-
-        while (a!=b) {
-
+   public int alNod() {
+        while (a != b) {
             if (a > b) {
                 a = a - b;
-            }
-            else {
+            } else {
                 b = b - a;
-
             }
         }
         return a;
     }
+
+     public int getResult() {
+         alNod();
+         return a;
+    }
+
 }
