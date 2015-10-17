@@ -5,59 +5,65 @@ import java.net.Socket;
 public class HttpOneThread {
 
     private static ServerSocket sockets;
+    static int count =0;
 
     public static void main(String[] args) {
-        int serverPort = 8080; // порт
+        
+            int serverPort = 8080; // порт
 
-        try {
-            sockets = new ServerSocket(serverPort); /*Сокета  сервера */
-        } catch (IOException e) {
-            e.printStackTrace(); //Если порт занят
-        }
+            try {
+                sockets = new ServerSocket(serverPort); /*Сокета  сервера */
+            } catch (IOException e) {
+                e.printStackTrace(); //Если порт занят
+            }
 
+        for (;count<=20 ; count++ ) {
 
-        try {
-            System.out.println("Сервер ожидает подключения");
-            Socket socket = sockets.accept(); /*Экземпляр класса
+            try {
+                System.out.println("Сервер ожидает подключения " + (count) +" раз");
+                Socket socket = sockets.accept(); /*Экземпляр класса
                                                 Ожидает подключения к sockets*/
 
-            System.out.println("Клиент установил соединение");
+                System.out.println("Клиент установил соединение");
 
-            InputStream inputStream = socket.getInputStream();    //Входящий поток данных
-            OutputStream outputStream = socket.getOutputStream(); //Исходящий
-            //Возвращают поток байт
+                InputStream inputStream = socket.getInputStream();    //Входящий поток данных
+                OutputStream outputStream = socket.getOutputStream(); //Исходящий
+                //Возвращают поток байт
 
-            String s ="<html><body><h1>The most simple server</h1></body></html>";
+                String s = "<html><body><h1>The most simple server "+ count+"</h1></body></html>";
             /*String trr = "HTTP/1.1 200 OK\r\n" +
                     "Server: Brig207\r\n" +
                     "Content-Type: text/html\r\n" +
                     "Content-Length: " + s.length() + "\r\n" +
                     "Connection: close\r\n\r\n";*/
 
-            String trr="";
-            trr+=s;
-            outputStream.write((trr).getBytes());
+                String trr = "";
+                trr += s;
+                outputStream.write((trr).getBytes());
 
 
-            InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
-            //Работа с входными потоком данных как со строками
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            //Буферизирует символы и позволяет извлекать как строки, так и символы
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                //Работа с входными потоком данных как со строками
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                //Буферизирует символы и позволяет извлекать как строки, так и символы
 
-            String get=bufferedReader.readLine();
-            //System.out.println("Было получено: "+ get);
-            outputStream.close();
+                String get = bufferedReader.readLine();
+                //System.out.println("Было получено: "+ get);
+                outputStream.close();
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
-}
 
+
+}
