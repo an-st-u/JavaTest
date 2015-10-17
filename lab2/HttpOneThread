@@ -2,16 +2,15 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class HttpOneThread {
 
     private static ServerSocket sockets;
 
     public static void main(String[] args) {
-        int serverPort = 12345; // порт
+        int serverPort = 8080; // порт
 
         try {
-            sockets = new ServerSocket(serverPort); /*Сокета  сервера ожидает
-                                                      ожидает запрос от клиента*/
+            sockets = new ServerSocket(serverPort); /*Сокета  сервера */
         } catch (IOException e) {
             e.printStackTrace(); //Если порт занят
         }
@@ -22,22 +21,23 @@ public class Server {
             Socket socket = sockets.accept(); /*Экземпляр класса
                                                 Ожидает подключения к sockets*/
 
-            System.out.println("Клиент установил подключение");
+            System.out.println("Клиент установил соединение");
 
             InputStream inputStream = socket.getInputStream();    //Входящий поток данных
             OutputStream outputStream = socket.getOutputStream(); //Исходящий
             //Возвращают поток байт
 
-            String s ="<html><body><h1>Something</h1></body></html>";
-            String trr = "HTTP/1.1 200 OK\r\n" +
+            String s ="<html><body><h1>The most simple server</h1></body></html>";
+            /*String trr = "HTTP/1.1 200 OK\r\n" +
                     "Server: Brig207\r\n" +
                     "Content-Type: text/html\r\n" +
                     "Content-Length: " + s.length() + "\r\n" +
-                    "Connection: close\r\n\r\n";
+                    "Connection: close\r\n\r\n";*/
+
+            String trr="";
             trr+=s;
             outputStream.write((trr).getBytes());
 
-            //outputStream.write(("Введите 2 числа\n").getBytes());
 
             InputStreamReader inputStreamReader= new InputStreamReader(inputStream);
             //Работа с входными потоком данных как со строками
@@ -45,10 +45,7 @@ public class Server {
             //Буферизирует символы и позволяет извлекать как строки, так и символы
 
             String get=bufferedReader.readLine();
-            System.out.println("Было получено: "+ get);
-            NOD up = new NOD("56,12");
-
-            outputStream.write(("NOD = " + up.getResults() + "\n").getBytes());
+            //System.out.println("Было получено: "+ get);
             outputStream.close();
 
 
@@ -63,3 +60,4 @@ public class Server {
         }
     }
 }
+
