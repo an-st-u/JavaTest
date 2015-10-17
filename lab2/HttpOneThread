@@ -8,7 +8,7 @@ public class HttpOneThread {
     static int count =0;
 
     public static void main(String[] args) {
-        
+
             int serverPort = 8080; // порт
 
             try {
@@ -30,14 +30,13 @@ public class HttpOneThread {
                 OutputStream outputStream = socket.getOutputStream(); //Исходящий
                 //Возвращают поток байт
 
-                String s = "<html><body><h1>The most simple server "+ count+"</h1></body></html>";
-            /*String trr = "HTTP/1.1 200 OK\r\n" +
+                String s = "<html><body><h1>The most simple server "+ count+"</h1></body></html>\n";
+                String trr = "HTTP/1.1 200 OK\r\n" +
                     "Server: Brig207\r\n" +
                     "Content-Type: text/html\r\n" +
                     "Content-Length: " + s.length() + "\r\n" +
-                    "Connection: close\r\n\r\n";*/
+                    "Connection: close\r\n\r\n";
 
-                String trr = "";
                 trr += s;
                 outputStream.write((trr).getBytes());
 
@@ -47,8 +46,12 @@ public class HttpOneThread {
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 //Буферизирует символы и позволяет извлекать как строки, так и символы
 
-                String get = bufferedReader.readLine();
-                //System.out.println("Было получено: "+ get);
+                while (true) {
+                    String get = bufferedReader.readLine();
+                    System.out.println("Было получено: " + get);
+                    if (get.isEmpty()) {break;}
+                }
+                
                 outputStream.close();
 
 
