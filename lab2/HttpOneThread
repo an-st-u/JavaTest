@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.InetAddress;
 
 public class HttpOneThread {
 
@@ -30,28 +31,40 @@ public class HttpOneThread {
                 OutputStream outputStream = socket.getOutputStream(); //Исходящий
                 //Возвращают поток байт
 
-                String s = "<html><body><h1>The most simple server "+ count+"</h1></body></html>\n";
-                String trr = "HTTP/1.1 200 OK\r\n" +
-                    "Server: Brig207\r\n" +
-                    "Content-Type: text/html\r\n" +
-                    "Content-Length: " + s.length() + "\r\n" +
-                    "Connection: close\r\n\r\n";
-
-                trr += s;
-                outputStream.write((trr).getBytes());
-
-
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 //Работа с входными потоком данных как со строками
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 //Буферизирует символы и позволяет извлекать как строки, так и символы
 
-                while (true) {
+                /*while (true) {
                     String get = bufferedReader.readLine();
                     System.out.println("Было получено: " + get);
                     if (get.isEmpty()) {break;}
-                }
-                
+                }*/
+
+                String get = bufferedReader.readLine();
+                get =  get.substring(get.indexOf("/")+1,get.lastIndexOf(" "));
+
+                String s = "<html><body><h1>"+"Вы ввели "+get+" (ENG) "+"</h1></body></html>\n";
+                String trr = "HTTP/1.1 400 NO\r\n" +
+                    "Server: Brig207\r\n" +
+                    "Content-Type: text/html; charset=utf-8\r\n" +
+                    "Content-Length: " + s.length() + "\r\n" +
+                    "Connection: close\r\n\r\n";
+                //String trr =" ";
+
+                trr += s;
+                outputStream.write((trr).getBytes());
+
+
+
+
+                /*while (true) {
+                    String get = bufferedReader.readLine();
+                    System.out.println("Было получено: " + get);
+                    if (get.isEmpty()) {break;}
+                }*/
+
                 outputStream.close();
 
 
