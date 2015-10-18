@@ -45,13 +45,13 @@ public class HttpOneThread {
                 String get = bufferedReader.readLine();
                 get =  get.substring(get.indexOf("/")+1,get.lastIndexOf(" "));
 
-                String s = "<html><body><h1>"+"Вы ввели "+get+" (ENG) "+"</h1></body></html>\n";
+                String Head="<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
+                String s = "<html>"+Head+"<body><h1>"+"Вы ввели "+get+" (ENG)"+"</h1></body></html>\n";
                 String trr = "HTTP/1.1 400 NO\r\n" +
-                    "Server: Brig207\r\n" +
-                    "Content-Type: text/html; charset=utf-8\r\n" +
-                    "Content-Length: " + s.length() + "\r\n" +
-                    "Connection: close\r\n\r\n";
-                //String trr =" ";
+                        "Server: Brig207\r\n" +
+                        "Content-Type: text/html; charset=utf-8\r\n" +
+                        "Content-Length: " + s.length() + "\r\n" +
+                        "Connection: close\r\n\r\n";
 
                 trr += s;
                 outputStream.write((trr).getBytes());
@@ -80,6 +80,4 @@ public class HttpOneThread {
         }
 
     }
-
-
 }
