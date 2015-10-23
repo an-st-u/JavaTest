@@ -1,55 +1,71 @@
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class SocketProcessor implements Runnable{
-    private Socket s;
+
+    private Socket sockets;
     private InputStream is;
     private OutputStream os;
 
-    public SocketProcessor(Socket s) throws Throwable {
-        this.s = s;
+public SocketProcessor(Socket s) throws Throwable {
+        sockets = s;
         this.is = s.getInputStream();
         this.os = s.getOutputStream();
-    }
+}
 
-    public void run() {
-        try {
-            readInputHeaders();
-            writeResponse("<html><body><h1>Something</h1></body></html>");
-        } catch (Throwable t) {
-                /*do nothing*/
-        } finally {
-            try {
-                s.close();
-            } catch (Throwable t) {
-                    /*do nothing*/
-            }
+public void run() {
+
+    try {
+        InputStreamReader inputStreamReader = new InputStreamReader(is);
+        //Работа с входными потоком данных как со строками
+
+        String get = request(inputStreamReader);
+        if (get.startsWith("GET")) {
+            get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
+            get = java.net.URLDecoder.decode(get, "utf-8");
+        } else {
+            get = "Wrong!";
         }
-        System.err.println("Client processing finished");
+
+         String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
+         String body = "<html>" + head + "<body><h1>" + "Вы ввели: " + get + "</h1></body></html>\n";
+         String answer = "HTTP/1.1 200 OK\r\n" +
+         "Server: Brig207\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
+         "Content-Length: " + body.length() + "\r\n" + "Connection: close\r\n\r\n";
+
+         answer += body;
+
+         os.write((answer).getBytes());
+         os.close();
+
+    } catch (IOException e) {
+        e.printStackTrace();
     }
 
-    private void writeResponse(String s) throws Throwable {
-        String response = "HTTP/1.1 200 OK\r\n" +
-                "Server: Brig2079\r\n" +
-                "Content-Type: text/html\r\n" +
-                "Content-Length: " + s.length() + "\r\n" +
-                "Connection: close\r\n\r\n";
-        String result = response + s;
-        os.write(result.getBytes());
-        os.flush();
-    }
+}
 
-    private void readInputHeaders() throws Throwable {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        while(true) {
-            String s = br.readLine();
-            if(s == null || s.trim().length() == 0) {
+
+private static String request(InputStreamReader inputStreamReader) throws IOException {
+
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        //Буферизирует символы и позволяет извлекать как строки, так и символы
+
+        String first=null;
+        while (true) {
+
+            String get = bufferedReader.readLine();
+            if (get.isEmpty()) {
                 break;
             }
+            System.out.println("Было получено: " + get);
+
+            if (first==null) {
+                first=get;
+            }
+
         }
+        return first;
     }
 
 }
