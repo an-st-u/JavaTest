@@ -37,7 +37,7 @@ public void run() {
          String body = "<html>" + head + "<body><h1>" + "Вы ввели: " + get + "</h1></body></html>\n";
          String answer = "HTTP/1.1 200 OK\r\n" +
          "Server: Brig207\r\n" +
-         "Content-Type: text/html; charset=Cp1251\r\n" +
+         "Content-Type: text/html; charset=UTF-8\r\n" +
          "Content-Length: " + (body.length()) + "\r\n" +
          "Connection: close\r\n\r\n";
 
