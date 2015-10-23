@@ -1,7 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
+import java.nio.charset.Charset;
+
 
 public class HttpOneThread {
 
@@ -10,13 +11,13 @@ public class HttpOneThread {
 
     public static void main(String[] args) {
 
-            int serverPort = 8080; // порт
+        int serverPort = 8080; // порт
 
-            try {
-                sockets = new ServerSocket(serverPort); /*Сокета  сервера */
-            } catch (IOException e) {
-                e.printStackTrace(); //Если порт занят
-            }
+        try {
+            sockets = new ServerSocket(serverPort); /*Сокета  сервера */
+        } catch (IOException e) {
+            e.printStackTrace(); //Если порт занят
+        }
 
         for (;count<=20 ; count++ ) {
 
@@ -31,23 +32,27 @@ public class HttpOneThread {
                 OutputStream outputStream = socket.getOutputStream(); //Исходящий
                 //Возвращают поток байт
 
+
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 //Работа с входными потоком данных как со строками
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 //Буферизирует символы и позволяет извлекать как строки, так и символы
 
+                String get = bufferedReader.readLine();
+                get =  get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
+                get=java.net.URLDecoder.decode(get,"utf-8");
+
+
                 /*while (true) {
-                    String get = bufferedReader.readLine();
-                    System.out.println("Было получено: " + get);
-                    if (get.isEmpty()) {break;}
+                    String geti = bufferedReader.readLine();
+                    System.out.println("Было получено: " + geti);
+                    if (geti.isEmpty()) {break;}
                 }*/
 
-                String get = bufferedReader.readLine();
-                get =  get.substring(get.indexOf("/")+1,get.lastIndexOf(" "));
 
                 String Head="<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
-                String s = "<html>"+Head+"<body><h1>"+"Вы ввели "+get+" (ENG)"+"</h1></body></html>\n";
-                String trr = "HTTP/1.1 400 NO\r\n" +
+                String s = "<html>"+Head+"<body><h1>"+"Вы ввели "+get+"</h1></body></html>\n";
+                String trr = "HTTP/1.1 400 OK\r\n" +
                         "Server: Brig207\r\n" +
                         "Content-Type: text/html; charset=utf-8\r\n" +
                         "Content-Length: " + s.length() + "\r\n" +
@@ -56,14 +61,6 @@ public class HttpOneThread {
                 trr += s;
                 outputStream.write((trr).getBytes());
 
-
-
-
-                /*while (true) {
-                    String get = bufferedReader.readLine();
-                    System.out.println("Было получено: " + get);
-                    if (get.isEmpty()) {break;}
-                }*/
 
                 outputStream.close();
 
@@ -80,4 +77,6 @@ public class HttpOneThread {
         }
 
     }
+
+
 }
