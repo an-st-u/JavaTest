@@ -30,8 +30,15 @@ public void run() {
 
         if (get.startsWith("index.html")) {
             get = index();
+        } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
+            String str;
+            str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
+            System.out.println(str);
+            NOD Up = new NOD(str);
+            int a = Up.getResult();
+            get = "<br>Нод чисел " + str + " равен: "+a;
         }
-        
+
 
          String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
          String body = "<html>" + head + "<body><h1>" + "Вы ввели: " + get + "</h1></body></html>\n";
@@ -44,7 +51,7 @@ public void run() {
          answer += body;
          System.out.println(answer);
 
-            os.write(answer.getBytes());
+            os.write(answer.trim().getBytes());
             os.close();
 
     } catch (IOException e) {
@@ -78,12 +85,19 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
 
     private String index() {
 
-        String index = "<br>Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br> \n" +
-                "Номер группы: РИ-330207 <br>\n" +
-                "Номер индивидуального задания: 3<br>\n" +
-                "Текст индивидуального задания:<br>\n" +
-                "\"НОД...\" <br>";
-        return index;
+        String index = "<br>Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br>" +
+                "Номер группы: РИ-330207 <br>" +
+                "Номер индивидуального задания: 3<br>" +
+                "Текст индивидуального задания:<br>" +
+                "НОД... <br>";
+
+        String n="";
+        for (int i=0;i<index.length();i++)
+        {
+            n+="\r";
+        }
+
+        return index+n;
     }
 
 }
