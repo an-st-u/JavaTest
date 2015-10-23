@@ -1,0 +1,5 @@
+interface Result {
+
+    int getResult();
+
+}
