@@ -27,17 +27,25 @@ public void run() {
             get = "Wrong!";
         }
 
+
+        if (get.startsWith("index.html")) {
+            get = index();
+        }
+        
+
          String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
          String body = "<html>" + head + "<body><h1>" + "Вы ввели: " + get + "</h1></body></html>\n";
          String answer = "HTTP/1.1 200 OK\r\n" +
          "Server: Brig207\r\n" +
-         "Content-Type: text/html; charset=utf-8\r\n" +
-         "Content-Length: " + body.length() + "\r\n" + "Connection: close\r\n\r\n";
+         "Content-Type: text/html; charset=Cp1251\r\n" +
+         "Content-Length: " + (body.length()) + "\r\n" +
+         "Connection: close\r\n\r\n";
 
          answer += body;
+         System.out.println(answer);
 
-         os.write((answer).getBytes());
-         os.close();
+            os.write(answer.getBytes());
+            os.close();
 
     } catch (IOException e) {
         e.printStackTrace();
@@ -68,4 +76,16 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         return first;
     }
 
+    private String index() {
+
+        String index = "<br>Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br> \n" +
+                "Номер группы: РИ-330207 <br>\n" +
+                "Номер индивидуального задания: 3<br>\n" +
+                "Текст индивидуального задания:<br>\n" +
+                "\"НОД...\" <br>";
+        return index;
+    }
+
 }
+
+
