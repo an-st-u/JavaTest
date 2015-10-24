@@ -19,7 +19,12 @@ public void run() {
         InputStreamReader inputStreamReader = new InputStreamReader(is);
         //Работа с входными потоком данных как со строками
 
+
         String get = request(inputStreamReader);
+
+        if(get == null)
+            throw new NullPointerException("get is null");
+
         if (get.startsWith("GET")) {
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
             get = java.net.URLDecoder.decode(get, "utf-8");
@@ -48,13 +53,15 @@ public void run() {
          "Content-Length: " + (body.length()) + "\r\n" +
          "Connection: close\r\n\r\n";
 
-         answer += body;
-         System.out.println(answer);
+         System.out.println(answer + body);
 
-            os.write(answer.trim().getBytes());
-            os.close();
+         os.write(answer.getBytes());
+         os.write(body.trim().getBytes());
+         os.close();
 
-    } catch (IOException e) {
+    }  catch (NullPointerException e) {
+        System.out.print(" ");
+    }  catch (IOException e) {
         e.printStackTrace();
     }
 
@@ -67,15 +74,15 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         //Буферизирует символы и позволяет извлекать как строки, так и символы
 
         String first=null;
-        while (true) {
+        while (true ) {
 
             String get = bufferedReader.readLine();
-            if (get.isEmpty()) {
+            if (get.isEmpty() || get.trim().length()==0) {
                 break;
             }
             System.out.println("Было получено: " + get);
 
-            if (first==null) {
+            if (first==null ) {
                 first=get;
             }
 
@@ -94,7 +101,7 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         String n="";
         for (int i=0;i<index.length();i++)
         {
-            n+="\r";
+            n+="\r"; //Быдло код
         }
 
         return index+n;
