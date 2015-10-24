@@ -33,7 +33,7 @@ public void run() {
         }
 
 
-        if (get.startsWith("index.html")) {
+        if (get.startsWith("index.html") || get.trim().length()==0) {
             get = index();
         } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
             String str;
@@ -55,7 +55,7 @@ public void run() {
 
          System.out.println(answer + body);
 
-         os.write(answer.getBytes());
+        os.write(answer.getBytes());
          os.write(body.trim().getBytes());
          os.close();
 
