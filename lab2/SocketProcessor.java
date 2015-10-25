@@ -97,12 +97,6 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
     private String index(){
 
         String index;
-        String IP = null;
-        try {
-            IP = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
 
         index = "Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br>\n" +
                 "Номер группы: РИ-330207 <br>\n" +
@@ -110,13 +104,11 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
                 "<br><br><div align=\"center\"><h2>Текст индивидуального задания:</h2>\n" +
                 "Наибольший общий делитель(НОД) чисел.\n" +
                 "Числа должны поступать в виде строки<br> с некоторым разделителем.<br>\n" +
-                "<br><a href=\"http://"+IP+":8080/NOD/\">Посчитать НОД</a>\n" +
+                "<br><a href=\"/NOD/\">Посчитать НОД</a>\n" +
                 "<br><br>Нажмите на ссылку, чтобы продублировать: \"Привет\""+
-                "\n<br><br><a href=\"http://"+IP+":8080/Привет\">Echo-server</a></div>\n";
+                "\n<br><br><a href=\"/Привет\">Echo-server</a></div>\n";
 
         return index;
     }
 
 }
-
-
