@@ -19,31 +19,33 @@ public void run() {
         InputStreamReader inputStreamReader = new InputStreamReader(is);
         //Работа с входными потоком данных как со строками
 
-
         String get = request(inputStreamReader);
-
         if(get == null)
-            throw new NullPointerException("get is null");
+            throw new NullPointerException();
 
         if (get.startsWith("GET")) {
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
             get = java.net.URLDecoder.decode(get, "utf-8");
+
+            if (get.startsWith("index.html") || get.trim().length()==0) {
+                get = index();
+            } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
+                String str;
+                str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
+                System.out.println(str);
+                try {
+                    NOD Up = new NOD(str);
+                    int a = Up.getResult();
+                    get = "Нод чисел " + str + " равен: " + a;
+                } catch (NumberFormatException e) {
+                    get = "Введите числа через запятую. Например: 12,54";
+                    System.err.println("NumberFormatException");
+                }
+            }
+
         } else {
             get = "Wrong!";
         }
-
-
-        if (get.startsWith("index.html") || get.trim().length()==0) {
-            get = index();
-        } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
-            String str;
-            str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
-            System.out.println(str);
-            NOD Up = new NOD(str);
-            int a = Up.getResult();
-            get = "<br>Нод чисел " + str + " равен: "+a;
-        }
-
 
          String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
          String body = "<html>" + head + "<body><h1>" + "Вы ввели: </h1><h2>" + get + "</h2></body></html>";
@@ -55,16 +57,15 @@ public void run() {
 
          System.out.println(answer + body);
 
-        os.write(answer.getBytes());
+         os.write(answer.getBytes());
          os.write(body.trim().getBytes());
          os.close();
 
-    }  catch (NullPointerException e) {
+    }   catch (NullPointerException e) {
         System.out.print(" ");
-    }  catch (IOException e) {
+    }   catch (IOException e) {
         e.printStackTrace();
     }
-
 }
 
 
@@ -72,6 +73,8 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
 
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         //Буферизирует символы и позволяет извлекать как строки, так и символы
+
+
 
         String first=null;
         while (true ) {
