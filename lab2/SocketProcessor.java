@@ -1,5 +1,7 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class SocketProcessor implements Runnable{
 
@@ -16,6 +18,7 @@ public SocketProcessor(Socket s) throws Throwable {
 public void run() {
 
     try {
+
         InputStreamReader inputStreamReader = new InputStreamReader(is);
         //Работа с входными потоком данных как со строками
 
@@ -25,7 +28,7 @@ public void run() {
 
         if (get.startsWith("GET")) {
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
-            get = java.net.URLDecoder.decode(get, "utf-8");
+            get = java.net.URLDecoder.decode(get, "UTF-8");
 
             if (get.startsWith("index.html") || get.trim().length()==0) {
                 get = index();
@@ -91,20 +94,29 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         return first;
     }
 
-    public String index() {
+    private String index(){
 
         String index;
+        String IP = null;
+        try {
+            IP = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
         index = "Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br>\n" +
                 "Номер группы: РИ-330207 <br>\n" +
                 "Номер индивидуального задания: 10<br>\n" +
                 "<br><br><div align=\"center\"><h2>Текст индивидуального задания:</h2>\n" +
                 "Наибольший общий делитель(НОД) чисел.\n" +
                 "Числа должны поступать в виде строки<br> с некоторым разделителем.<br>\n" +
-                "<br><a href=\"http://localhost:8080/NOD/\">Посчитать НОД</a>\n" +
+                "<br><a href=\"http://"+IP+":8080/NOD/\">Посчитать НОД</a>\n" +
                 "<br><br>Нажмите на ссылку, чтобы продублировать: \"Привет\""+
-                "\n<br><br><a href=\"http://localhost:8080/Привет\">Echo-server</a></div>\n";
+                "\n<br><br><a href=\"http://"+IP+":8080/Привет\">Echo-server</a></div>\n";
 
         return index;
     }
 
 }
+
+
