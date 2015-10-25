@@ -38,7 +38,7 @@ public void run() {
                     int a = Up.getResult();
                     get = "Нод чисел " + str + " равен: " + a;
                 } catch (NumberFormatException e) {
-                    get = "Введите числа через запятую. Например: 12,54";
+                    get = "Введите числа в адресную строку через запятую. Например: NOD/12,54";
                     System.err.println("NumberFormatException");
                 }
             }
@@ -99,8 +99,12 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
                 "Номер индивидуального задания: 10<br>\n" +
                 "<br><br><div align=\"center\"><h2>Текст индивидуального задания:</h2>\n" +
                 "Наибольший общий делитель(НОД) чисел.\n" +
-                "Числа должны поступать в виде строки<br> с некоторым разделителем.<br></div>\n";
+                "Числа должны поступать в виде строки<br> с некоторым разделителем.<br>\n" +
+                "<br><a href=\"http://localhost:8080/NOD/\">Посчитать НОД</a>\n" +
+                "<br><br>Нажмите на ссылку, чтобы продублировать: \"Привет\""+
+                "\n<br><br><a href=\"http://localhost:8080/Привет\">Echo-server</a></div>\n";
 
         return index;
     }
+
 }
