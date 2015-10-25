@@ -74,8 +74,6 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         //Буферизирует символы и позволяет извлекать как строки, так и символы
 
-
-
         String first=null;
         while (true ) {
 
@@ -93,9 +91,10 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
         return first;
     }
 
-    private String index() {
+    public String index() {
 
-        String index = "Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br>\n" +
+        String index;
+        index = "Работу выполняли:<br> Бергер Юлия<br> Сапронов Ярослав <br>Степакшин Андрей<br>\n" +
                 "Номер группы: РИ-330207 <br>\n" +
                 "Номер индивидуального задания: 10<br>\n" +
                 "Текст индивидуального задания:<br>\n" +
