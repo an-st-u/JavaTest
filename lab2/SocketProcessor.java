@@ -1,7 +1,5 @@
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class SocketProcessor implements Runnable{
 
@@ -29,22 +27,7 @@ public void run() {
         if (get.startsWith("GET")) {
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
             get = java.net.URLDecoder.decode(get, "UTF-8");
-
-            if (get.startsWith("index.html") || get.trim().length()==0) {
-                get = index();
-            } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
-                String str;
-                str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
-                System.out.println(str);
-                try {
-                    NOD Up = new NOD(str);
-                    int a = Up.getResult();
-                    get = "Нод чисел " + str + " равен: " + a;
-                } catch (NumberFormatException e) {
-                    get = "Введите числа в адресную строку через запятую. Например: NOD/12,54";
-                    System.err.println("NumberFormatException");
-                }
-            }
+            get = afterGet(get); //Обработка текста после GET/
 
         } else {
             get = "Wrong!";
@@ -72,7 +55,7 @@ public void run() {
 }
 
 
-private static String request(InputStreamReader inputStreamReader) throws IOException {
+    private static String request(InputStreamReader inputStreamReader) throws IOException {
 
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         //Буферизирует символы и позволяет извлекать как строки, так и символы
@@ -109,6 +92,27 @@ private static String request(InputStreamReader inputStreamReader) throws IOExce
                 "\n<br><br><a href=\"/Привет\">Echo-server</a></div>\n";
 
         return index;
+    }
+    
+    private String afterGet (String get) {
+        
+        if (get.startsWith("index.html") || get.trim().length()==0) {
+            get = index();
+        } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
+            String str;
+            str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
+            System.out.println(str);
+            try {
+                NOD Up = new NOD(str);
+                int a = Up.getResult();
+                get = "Нод чисел " + str + " равен: " + a;
+            } catch (NumberFormatException e) {
+                get = "Введите числа в адресную строку через запятую. Например: NOD/12,54";
+                System.err.println("NumberFormatException");
+            }
+        }
+        
+        return get;
     }
 
 }
