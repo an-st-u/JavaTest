@@ -1,11 +1,9 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.*;
 import java.net.Socket;
 
 public class SocketProcessor implements Runnable{
 
-    public Socket sockets;
+    private Socket sockets;
     private InputStream is;
     private OutputStream os;
 
@@ -33,18 +31,19 @@ public void run() {
             get = "Был получен не GET/ запрос";
         }
 
-         String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
-         String body = "<html>" + head + "<body><h1>" + "Вы ввели: </h1><h2>" + get + "</h2></body></html>";
-         String answer = "HTTP/1.1 200 OK\r\n" +
-         "Server: Brig207\r\n" +
-         "Content-Type: text/html; charset=UTF-8\r\n" +
-         "Content-Length: " + (body.getBytes().length) + "\r\n" +
-         "Connection: close\r\n\r\n";
+        String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
+        String body = "<html>" + head + "<body><h1>" + "Вы ввели: </h1><h2>" + get + "</h2></body></html>";
+        String answer = "HTTP/1.1 200 OK\r\n" +
+        "Server: Brig207\r\n" +
+        "Content-Type: text/html; charset=UTF-8\r\n" +
+        "Content-Length: " + (body.getBytes().length) + "\r\n" +
+        "Connection: close\r\n\r\n";
 
-         System.out.println(answer + body);
+        System.out.println(answer + body);
 
-         os.write(answer.getBytes());
-         os.write(body.getBytes());
+        os.write(answer.getBytes());
+        os.write(body.getBytes());
+        os.flush();
 
     }   catch (NullPointerException e) {
         System.out.print(" ");
@@ -53,7 +52,7 @@ public void run() {
     }   finally {
 
             try {
-                os.close();
+                sockets.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,6 +68,7 @@ public void run() {
         while (true ) {
 
             String get = bufferedReader.readLine();
+
             if (get.isEmpty()) {
                 break;
             }
