@@ -3,7 +3,7 @@ import java.net.Socket;
 
 public class SocketProcessor implements Runnable{
 
-    private Socket sockets;
+    public Socket sockets;
     private InputStream is;
     private OutputStream os;
 
@@ -21,16 +21,14 @@ public void run() {
         //Работа с входными потоком данных как со строками
 
         String get = request(inputStreamReader);
-        if(get == null)
-            throw new NullPointerException();
 
         if (get.startsWith("GET")) {
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
             get = java.net.URLDecoder.decode(get, "UTF-8");
-            get = afterGet(get); //Обработка текста после GET/
+            get = afterGET(get); //Обработка текста после GET/
 
         } else {
-            get = "Wrong!";
+            get = "Был получен не GET/ запрос";
         }
 
          String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
@@ -44,16 +42,21 @@ public void run() {
          System.out.println(answer + body);
 
          os.write(answer.getBytes());
-         os.write(body.trim().getBytes());
-         os.close();
+         os.write(body.getBytes());
 
     }   catch (NullPointerException e) {
         System.out.print(" ");
-    }   catch (IOException e) {
+    }    catch (IOException e) {
         e.printStackTrace();
+    }   finally {
+
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 }
-
 
     private static String request(InputStreamReader inputStreamReader) throws IOException {
 
@@ -93,15 +96,14 @@ public void run() {
 
         return index;
     }
-    
-    private String afterGet (String get) {
-        
+
+    private String afterGET (String get) {
+
         if (get.startsWith("index.html") || get.trim().length()==0) {
             get = index();
-        } else if(get.startsWith("NOD") && !get.startsWith("index.html")) {
+        } else if(get.startsWith("NOD") && get.startsWith("index.html/NOD")) {
             String str;
             str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
-            System.out.println(str);
             try {
                 NOD Up = new NOD(str);
                 int a = Up.getResult();
@@ -111,8 +113,6 @@ public void run() {
                 System.err.println("NumberFormatException");
             }
         }
-        
         return get;
     }
-
 }
