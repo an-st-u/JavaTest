@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -67,7 +69,7 @@ public void run() {
         while (true ) {
 
             String get = bufferedReader.readLine();
-            if (get.isEmpty() || get.trim().length()==0) {
+            if (get.isEmpty()) {
                 break;
             }
             System.out.println("Было получено: " + get);
