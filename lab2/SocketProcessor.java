@@ -103,7 +103,7 @@ public void run() {
 
         if (get.startsWith("index.html") || get.trim().length()==0) {
             get = index();
-        } else if(get.startsWith("NOD") && get.startsWith("index.html/NOD")) {
+        } else if(get.startsWith("NOD") || get.startsWith("index.html/NOD")) {
             String str;
             str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
             try {
