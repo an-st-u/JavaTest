@@ -6,13 +6,20 @@ public class SocketProcessor implements Runnable{
     private Socket sockets;
     private InputStream is;
     private OutputStream os;
-    private FileReader fis;
+    private FileReader fr;
+    private FileInputStream fis;
+    String pathD = "C:\\JavaServer\\";
+    private String type="text/html";;
+
 
     public SocketProcessor(Socket s) throws Throwable {
+
         sockets = s;
         this.is = s.getInputStream();
         this.os = s.getOutputStream();
+
     }
+
 
     public void run() {
 
@@ -26,24 +33,23 @@ public class SocketProcessor implements Runnable{
             if (get.startsWith("GET")) {
                 get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
                 get = URLDecoder.decode(get, "UTF-8");
-                get = afterGET(get); //Обработка текста после GET/
+                get = afterGET(get); //Обработка текста после GET в байтах/
 
             } else {
                 get = "Был получен не GET/ запрос";
             }
 
-            String head = "<head><link rel=\"shortcut icon\" href=\"http://www.iconj.com/ico/h/9/h9arpg5dsi.ico\" type=\"image/x-icon\" /></head>\n";
-            String body = "<html>" + head + "<body><h1>" + "Вы ввели: </h1><h2>" + get + "</h2></body></html>";
+
             String answer = "HTTP/1.1 200 OK\r\n" +
                     "Server: Brig207\r\n" +
-                    "Content-Type: text/html; charset=UTF-8\r\n" +
-                    "Content-Length: " + (body.getBytes().length) + "\r\n" +
+                    "Content-Type: "+type+"; charset=UTF-8\r\n" +
+                    "Content-Length: " + (get.getBytes().length) + "\r\n" +
                     "Connection: close\r\n\r\n";
 
-            System.out.println(answer + body);
+            System.out.println("Отправлено:\n"+answer);
 
             os.write(answer.getBytes());
-            os.write(body.getBytes());
+            os.write(get.getBytes());
             os.flush();
 
         }   catch (NullPointerException e) {
@@ -68,11 +74,11 @@ public class SocketProcessor implements Runnable{
         //Буферизирует символы и позволяет извлекать как строки, так и символы
 
         String first=null;
-            while (true ) {
+        while (true ) {
 
             String get = bufferedReader.readLine();
 
-            if (get.isEmpty() && !get.equals("\r\n")) {
+            if (get.isEmpty()) {
                 break;
             }
             System.out.println("Было получено: " + get);
@@ -85,53 +91,93 @@ public class SocketProcessor implements Runnable{
         return first;
     }
 
-    private String index(){
+    private String index(String nameOfFile){
 
-        String index = "";
-        
+
+        File file = new File(pathD+nameOfFile);
+        String index ="";
+
         try {
-            fis = new FileReader("C:\\FileServer\\index.html");
+            fr = new FileReader(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-
         try {
-            
-            BufferedReader br = new BufferedReader(fis);
+
+            BufferedReader br = new BufferedReader(fr);
             while (true) {
+
                 String buf = br.readLine();
-                if (buf.isEmpty()){
+                if (buf==null) {
                     break;
                 }
                 index+=buf;
+
             }
-            fis.close();
-            
+            fr.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        
         return index;
     }
 
     private String afterGET (String get) {
 
-        if (get.startsWith("index.html") || get.trim().length()==0) {
-            get = index();
-        } else if(get.startsWith("NOD") || get.startsWith("index.html/NOD")) {
-            String str;
-            str = get.substring(get.indexOf("/") + 1, get.lastIndexOf(""));
-            try {
-                NOD Up = new NOD(str);
-                int a = Up.getResult();
-                get = "Нод чисел " + str + " равен: " + a;
-            } catch (NumberFormatException e) {
-                get = "Введите числа в адресную строку через запятую. Например: NOD/12,54";
-                System.err.println("NumberFormatException");
+        String typeOfFile = get.substring(get.indexOf(".") + 1, get.lastIndexOf(""));
+
+        if (typeOfFile.equals("jpg") || typeOfFile.equals("ico") || typeOfFile.equals("png")) {
+            picture(get,typeOfFile);
+            return null;
+        } else {
+            if (get.trim().length() == 0) {
+                get = index("index.html");
             }
         }
         return get;
+    }
+
+    private void picture(String nameOfFile,String typeOfFile) {
+
+            type = "image/"+typeOfFile;
+
+        try {
+            File file = new File(pathD+nameOfFile);
+
+            String answer = "HTTP/1.1 200 OK\r\n" +
+                    "Content-Type: "+type+"\r\n" +
+                    "Content-Length: " + (file.length()) + "\r\n" +
+                    "Connection: close\r\n\r\n";
+            System.out.println("Picture Отправлено:\n"+answer);
+
+            os.write(answer.getBytes());
+            fis = new FileInputStream(file);
+            byte[] buf = new byte[32*1024];
+
+            while (true){
+
+                int n=fis.read(buf);
+
+                if (n!=-1)
+                    os.write(buf);
+                else
+                    break;
+
+            }
+
+
+            fis.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println();
+        }
+
+
+
+
     }
 }
