@@ -1,0 +1,33 @@
+body {
+
+	background-color: #f6f6f6;
+
+
+}
+
+
+#backs {
+
+	background-color: #e5e6ea;
+	width: 70%;
+	margin-left: 15%;
+	margin-right: 15%;
+	padding-left: 20px;
+	padding-right: 20px;
+
+}
+
+#osnova {
+
+ 	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
+}
+
+#bot {
+	
+	padding: 15px;
+	padding-top: 25px;
+	padding-bottom: 25px;	
+	background-color: #454545;
+}
