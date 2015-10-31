@@ -1,3 +1,11 @@
+*{
+
+	margin:0px;
+	padding:0px;
+
+}
+
+
 body {
 
 	background-color: #f6f6f6;
@@ -6,18 +14,18 @@ body {
 }
 
 
-#backs {
+#osnova {
 
-	background-color: #e5e6ea;
+	background-color: #fdfcfc;
 	width: 70%;
-	margin-left: 15%;
-	margin-right: 15%;
+	margin: 40px 15% 15% auto;
+	box-shadow: 2px 3px 3px #DDDDDD;
 	padding-left: 20px;
 	padding-right: 20px;
 
 }
 
-#osnova {
+#text_1 {
 
  	padding-left: 10px;
 	padding-right: 10px;
@@ -26,8 +34,6 @@ body {
 
 #bot {
 	
-	padding: 15px;
-	padding-top: 25px;
-	padding-bottom: 25px;	
+	padding: 25px;	
 	background-color: #454545;
 }
