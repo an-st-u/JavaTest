@@ -27,13 +27,14 @@ public class SocketProcessor implements Runnable{
             //Работа с входными потоком данных как со строками
 
             String get = request(inputStreamReader);
-            String type = "text/html";
             String numbers = "200 OK";
 
             if (get.startsWith("GET")) {
                 get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
+                if (get.endsWith("/")) {
+                    get = get.substring(0,get.length()-1);
+                }
                 get = URLDecoder.decode(get, "UTF-8");
-                type = typeFunction(get);
 
             } else {
                 get = "Был получен не GET/ запрос";
@@ -53,7 +54,7 @@ public class SocketProcessor implements Runnable{
 
             String answer = "HTTP/1.1 "+numbers+"\r\n" +
                     "Server: Brig207\r\n" +
-                    "Content-Type: "+type+"; charset=UTF-8\r\n" +
+                    "Content-Type: "+ typeFunction(get) +"; charset=UTF-8\r\n" +
                     "Content-Length: " + file.length() + "\r\n" +
                     "Connection: close\r\n\r\n";
 
@@ -122,11 +123,19 @@ public class SocketProcessor implements Runnable{
     private String typeFunction(String get){
 
         String typeOfFile = get.substring(get.indexOf(".") + 1, get.lastIndexOf(""));
-        if ((typeOfFile.equals("jpg")) || (typeOfFile.equals("png"))
-                || (typeOfFile.equals("ico")) || (typeOfFile.equals("jpeg")))  {
-            typeOfFile = "image/"+typeOfFile;
-        } else {
-            typeOfFile = "text/html";
+        switch (typeOfFile) {
+            case "jpg":
+            case "png":
+            case "ico":
+            case "jpeg":
+                typeOfFile = "image/" + typeOfFile;
+                break;
+            case "js":
+                typeOfFile = "text/JavaScript";
+                break;
+            default:
+                typeOfFile = "text/" + typeOfFile;
+                break;
         }
             return typeOfFile;
     }
