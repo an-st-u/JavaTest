@@ -1,38 +1,38 @@
-import java.util.List;
-import java.lang.String;
-public class NOD implements Result{
-    int a, b;
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="/JS/main.js"></script>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="/css/example.css"  />
+<title>Посчитать НОД</title>
+</head>
 
-    NOD(String first) {
-        String[] s = first.split(",");
-        a = Integer.parseInt(s[0], 10);
-        b = Integer.parseInt(s[1], 10);
-    }
+<body>
 
-    NOD(Double ... c) {
-        double buf;
-        buf = c[0];
-        a = (int) buf;
-        buf = c[1];
-        b = (int) buf;
-    }
+<div id="header">
+<ul>
+<li><a href="/">Главная</a></li>
+<li><a href="/pages/NOD.html">НОД</a></li>
+<li><a href="/pages/Kino.html">Кинотеатр</a></li>
+<ul>
+</div>
 
-    NOD(List<Double> c) {
-        String[] s;
-        s = (String[]) c.toArray();
-        a = Integer.parseInt(s[0], 10);
-        b = Integer.parseInt(s[1], 10);
-    }
+<div  id="content">
 
-    public int getResult() {
-        while (a != b) {
-            if (a > b) {
-                a = a - b;
-            } else {
-                b = b - a;
-            }
-        }
-        return a;
-    }
+<div id="text_2">
 
-}
+
+<p><b>Введите два чиса через запятую. Например 12,54:</b><br>
+<br><input type="text" id="nod_1" size="50" value="Вводить нужно здесь..." onfocus="сlearDefault()"><br>
+<p><input type="submit" value="Отправить" onclick="sendText()">
+   <input type="reset" value="Очистить" onclick="сlear()"></p>
+
+<br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+</div>
+</div>
+<div id="bot" align="right"><img src="/logo.png" alt=""></div>
+
+
+</body>
+</html>
