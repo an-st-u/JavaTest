@@ -25,10 +25,13 @@ public class SocketProcessor implements Runnable{
         try {
 
             String numbers = "200 OK";
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            byte[] buf = new byte[is.available()];
-            int n = is.read(buf);
+            char[] buf = new char[16<<10];
+            int n = br.read(buf);
+
             String str = new String(buf,0,n);
+
             System.out.println("Было получено:\n"+str);
             System.out.println("_____________");
 
@@ -64,13 +67,13 @@ public class SocketProcessor implements Runnable{
             os.write(answer.getBytes());
 
             fis = new FileInputStream(file);
-            buf = new byte[32*1024];
+            byte[] bBuf = new byte[32<<10];
 
             while (true){
 
-                n=fis.read(buf);
-                if (n!=-1)
-                    os.write(buf);
+                n=fis.read(bBuf);
+                if (n>0)
+                    os.write(bBuf);
                 else
                     break;
 
@@ -133,9 +136,15 @@ public class SocketProcessor implements Runnable{
     private void afterPost(String str,String post){
 
         try {
-        String value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
-        System.err.println("Вы прислали: "+value_buf);
-        String value;
+
+            String value_buf;
+            if (str.contains("elem")) {
+                value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
+            } else {
+                value_buf = "96,100";
+            }
+            System.err.println("Вы прислали: "+value_buf);
+            String value;
 
             try {
             NOD nod = new NOD(value_buf);
@@ -145,8 +154,7 @@ public class SocketProcessor implements Runnable{
                 value = "Введите в правильной форме, пожалуйста...";
             }
 
-
-        File file = new File(pathD+post);
+            File file = new File(pathD+post);
 
             fos = new FileOutputStream(file);
             fos.write(value.getBytes());
