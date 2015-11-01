@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="/JS/main.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="/css/example.css"  />
 <title>Посчитать НОД</title>
@@ -17,11 +18,20 @@
 </div>
 
 <div  id="content">
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+
+<div id="text_2">
+
+
+<p><b>Введите два чиса через запятую. Например 12,54:</b><br>
+<br><input type="text" id="nod_1" size="50" value="Вводить нужно здесь..." onfocus="сlearDefault()"><br>
+<p><input class="btn" type="submit" value="Отправить" onclick="sendText()">
+   <input class="btn" type="reset" value="Очистить" onclick="сlear()"></p>
+
+<br> <br> <br>
 <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
 </div>
-<div id="bot" align="right"><img src="logo.png" alt=""></div>
+</div>
+<div id="bot" align="right"><img src="/logo.png" alt=""></div>
 
 
 </body>
