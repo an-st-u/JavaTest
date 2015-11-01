@@ -7,6 +7,7 @@ public class SocketProcessor implements Runnable{
     private InputStream is;
     private OutputStream os;
     FileInputStream fis;
+    FileOutputStream fos;
     String pathD = "C:\\JavaServer\\";
 
 
@@ -23,34 +24,35 @@ public class SocketProcessor implements Runnable{
 
         try {
 
-            InputStreamReader inputStreamReader = new InputStreamReader(is);
-            //Работа с входными потоком данных как со строками
-
-            String get = request(inputStreamReader);
             String numbers = "200 OK";
 
-            if (get.startsWith("GET")) {
-                get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
-                if (get.endsWith("/")) {
-                    get = get.substring(0,get.length()-1);
-                }
-                get = URLDecoder.decode(get, "UTF-8");
+            byte[] buf = new byte[64*1024];
+            int n = is.read(buf);
+            String str = new String(buf,0,n);
+            System.out.println("Было получено:\n"+str);
+            System.out.println("_____________");
 
+            String get = firstLine(str);
+
+            if (get.startsWith("GET")) {
+                get = afterGet(get);
+            } else if (get.startsWith("POST")) {
+                get = afterGet(get);
+                afterPost(str,get);
             } else {
-                get = "Был получен не GET/ запрос";
+                get = "Был получен не GET или POST запрос";
             }
+
 
             if (get.trim().length()==0)
                 get = "index.html";
-
             File file = new File(pathD+get);
-
             if (!file.exists()) {
                 get = "404.html";
                 numbers="404 Not Found";
             }
-
             file = new File(pathD+get);
+
 
             String answer = "HTTP/1.1 "+numbers+"\r\n" +
                     "Server: Brig207\r\n" +
@@ -59,31 +61,31 @@ public class SocketProcessor implements Runnable{
                     "Connection: close\r\n\r\n";
 
             System.out.println("Отправлено:\n"+answer);
-
             os.write(answer.getBytes());
 
             fis = new FileInputStream(file);
-            byte[] buf = new byte[32*1024];
+            buf = new byte[32*1024];
 
             while (true){
 
-                int n=fis.read(buf);
-
+                n=fis.read(buf);
                 if (n!=-1)
                     os.write(buf);
                 else
                     break;
 
             }
-
             fis.close();
+
             os.flush();
 
         }   catch (NullPointerException e) {
             System.out.print("");
         }    catch (IOException e) {
             e.printStackTrace();
-        }   finally {
+        }   catch (StringIndexOutOfBoundsException e) {
+            System.out.println("Боже мой");
+        }finally {
 
             try {
                 if (sockets.isClosed()) {
@@ -95,27 +97,16 @@ public class SocketProcessor implements Runnable{
         }
     }
 
-    private static String request(InputStreamReader inputStreamReader) throws IOException {
+    private String firstLine(String str) throws IOException {
 
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        //Буферизирует символы и позволяет извлекать как строки, так и символы
-
-        String first=null;
-        while (true ) {
-
-            String get = bufferedReader.readLine();
-
-            if (get.isEmpty()) {
-                break;
-            }
-            System.out.println("Было получено: " + get);
-
-            if (first==null) {
-                first=get;
-            }
-
+        String first;
+        if (!str.isEmpty()) {
+        first = str.substring(0,str.indexOf("\n"));
+        } else {
+            return str;
         }
         return first;
+
     }
 
 
@@ -137,6 +128,45 @@ public class SocketProcessor implements Runnable{
                 typeOfFile = "text/" + typeOfFile;
                 break;
         }
-            return typeOfFile;
+        return typeOfFile;
+    }
+    private void afterPost(String str,String post){
+
+        try {
+        String value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
+        System.err.println("Вы прислали: "+value_buf);
+        NOD nod = new NOD(value_buf);
+        int a = nod.getResult();
+            
+        String value = value_buf + " = " + a;
+            
+        File file = new File(pathD+post);
+
+            fos = new FileOutputStream(file);
+            fos.write(value.getBytes());
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e){
+            System.out.println("");
+        } catch (NumberFormatException e) {
+            System.out.println(" ");
+        }
+    }
+
+    private String afterGet(String get){
+
+            get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
+            if (get.endsWith("/")) {
+                get = get.substring(0,get.length()-1);
+            }
+            try {
+                get = URLDecoder.decode(get, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        return get;
     }
 }
