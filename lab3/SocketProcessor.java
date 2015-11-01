@@ -135,11 +135,17 @@ public class SocketProcessor implements Runnable{
         try {
         String value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
         System.err.println("Вы прислали: "+value_buf);
-        NOD nod = new NOD(value_buf);
-        int a = nod.getResult();
-            
-        String value = value_buf + " = " + a;
-            
+        String value;
+
+            try {
+            NOD nod = new NOD(value_buf);
+            int a = nod.getResult();
+                value = value_buf + " = " + a;
+            } catch (NumberFormatException e) {
+                value = "Введите в правильной форме, пожалуйста...";
+            }
+
+
         File file = new File(pathD+post);
 
             fos = new FileOutputStream(file);
@@ -148,10 +154,8 @@ public class SocketProcessor implements Runnable{
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e){
-            System.out.println("");
-        } catch (NumberFormatException e) {
-            System.out.println(" ");
+        } catch (IOException e) {
+            System.out.println();
         }
     }
 
