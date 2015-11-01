@@ -26,7 +26,7 @@ public class SocketProcessor implements Runnable{
 
             String numbers = "200 OK";
 
-            byte[] buf = new byte[64*1024];
+            byte[] buf = new byte[is.available()];
             int n = is.read(buf);
             String str = new String(buf,0,n);
             System.out.println("Было получено:\n"+str);
