@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="/JS/third.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="/css/example.css"  />
 <title>Индивидуальная работа</title>
@@ -17,11 +18,24 @@
 </div>
 
 <div  id="content">
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+<div id="text_2">
+
+<table id="tablitsa">
+	<tr>
+		<td>Кинотеатр</td>
+		<td>Адрес</td>
+		<td>Сайт</td>
+	</tr>
+</table>
+<br>
+<p><b>Введите название кинотеатра:</b><br>
+<br><input type="text" id="nod_1" size="50" value="Вводить нужно здесь..." onfocus="сlearDefault()"><br>
+<p><input class="btn" type="submit" value="Добавить" onclick="add()">
+   <input class="btn" type="reset" value="Убрать" onclick="_remove()"></p>
+
 </div>
-<div id="bot" align="right"><img src="logo.png" alt=""></div>
+</div>
+<div id="bot" align="right"><img src="/logo.png" alt=""></div>
 
 
 </body>
