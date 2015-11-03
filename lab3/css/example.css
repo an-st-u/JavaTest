@@ -135,10 +135,34 @@ td {
 
 }
 
+td:last-child {
+
+	width: 100px;
+
+}
+
+
 
 .vvod{
 
 	height:24px;
 	border: 1px solid #454545;
 
+}
+
+.del_btn {
+	
+	border-radius: 5px;
+	border: 0px;
+	color: #cccccc;
+	background: #606060;
+	height: 18px;
+	width: 24px;
+	margin: 3px auto;
+	text-decoration: none;
+}
+
+.del_btn:hover {
+	background: #353535;
+	text-decoration: none;
 }
