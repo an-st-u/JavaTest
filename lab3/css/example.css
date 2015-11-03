@@ -76,6 +76,7 @@ body {
 
 
 .btn {
+	
 	border-radius: 3px;
 	border:0px;
 	color: #cccccc;
@@ -93,12 +94,22 @@ body {
 
 
 table {
+	border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
 	margin: 20px 10%; 
 }
 
+
 td {
-	border: 1px solid grey;
+	border: 1px solid #454545;
 	padding: 2px 5px;
 	width: 250px;
+	height:24px;
+
+}
+
+.vvod{
+
+	height:24px;
+	border: 1px solid #454545;
 
 }
