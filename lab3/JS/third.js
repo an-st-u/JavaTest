@@ -5,7 +5,8 @@ function add() {
 	var address = document.getElementById('address').value;
 	var site = document.getElementById('site').value;
 	var tr = document.createElement('tr');
-	tr.innerHTML = '<td>'+name+'</td><td>'+address+'</td><td>'+site+'</td>';	
+	tr.innerHTML = '<td>'+name+'</td><td>'+address+'</td>' +
+        '<td><a href="http://'+site+'">'+name+'</a></td>';
 	suda.appendChild(tr);
 }
 
