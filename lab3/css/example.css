@@ -5,6 +5,15 @@
 
 }
 
+a {
+	color:#5a3110;
+
+}
+
+a:hover {
+	color:#9a3110;
+}
+
 
 body {
 
@@ -98,6 +107,25 @@ table {
 	margin: 20px 10%; 
 }
 
+tr:first-child {
+	
+	background-color: #555555;
+	color: #cccccc;
+
+}
+
+tr:first-child:hover {
+	
+	background-color: #555555;
+	color: #cccccc;
+
+}
+
+tr:hover {
+	
+	background-color: #f6f6f6;
+
+}
 
 td {
 	border: 1px solid #454545;
@@ -106,6 +134,7 @@ td {
 	height:24px;
 
 }
+
 
 .vvod{
 
