@@ -90,7 +90,7 @@ function confirm(row) {
 		row.removeChild(Confirm.parentNode);
 	}
 
-	sendText(baza,row);
+	sendText(baza,row); //
 
 
 	for (var i=0;i<3;i++) {
