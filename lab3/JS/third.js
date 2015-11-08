@@ -1,5 +1,6 @@
 function addRow() {
 	
+	freezing(1);
 	var suda = document.getElementById('tablitsa');
 	
 	var row = suda.insertRow(-1);
@@ -13,6 +14,7 @@ function addRow() {
 	Confirm.classList.add("del_btn");
     	Confirm.onclick = function() {
 		confirm(this.parentNode.parentNode);
+		freezing(0);
 	}
 
 }
@@ -64,13 +66,14 @@ function сlearDefault(){
 }
 
 function removeIndex(row) {
-
+	
 	var suda = document.getElementById('tablitsa');
 	suda.deleteRow(row.parentNode.parentNode.rowIndex);
 
 }
 
 function confirm(row) {
+
 
 	var baza = [];
 	var temp = row.childNodes[3].childNodes[0];
@@ -110,8 +113,8 @@ function confirm(row) {
 }
 
 function EditRow(row,baza) {
-
-		
+	
+	freezing(1);	
 	for (var i=1;i>=0;i--) {
 		var Confirm = row.childNodes[3].childNodes[i];
 		Confirm.parentNode.removeChild(Confirm);
@@ -124,7 +127,7 @@ function EditRow(row,baza) {
 		row.removeChild(Confirm);
 	}
 
-	for (var i=2;i>=0;i--) {
+	for (var i=0;i<3;i++) {
 		addCellInput(row,baza[i],"text");
 	}
 
@@ -135,5 +138,30 @@ function EditRow(row,baza) {
 	Confirm.classList.add("del_btn");
     	Confirm.onclick = function() {
 		confirm(this.parentNode.parentNode);
+		freezing(0);
 	}
+}
+
+function freezing(i) {
+	
+	var cold = document.getElementById('add');
+	var cold2 = document.getElementById('remall');
+	
+	if (i==1) {	
+		cold.value = "Wait...";
+		cold.onclick = "";
+		cold2.value = "Удаление пока невозможно";
+		cold2.onclick = "";
+	} else {
+		cold.value = "Добавить";
+		cold.onclick = function() {
+		addRow();
+		}
+		cold2.value = "Убрать последнюю строку";
+		cold2.onclick = function() {
+		_remove();
+		}
+
+	}
+
 }
