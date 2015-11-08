@@ -1,3 +1,5 @@
+getBaza();
+
 function addRow() {
 	
 	freezing(1);
@@ -68,7 +70,9 @@ function сlearDefault(){
 function removeIndex(row) {
 	
 	var suda = document.getElementById('tablitsa');
+	delText(row.parentNode.parentNode);
 	suda.deleteRow(row.parentNode.parentNode.rowIndex);
+	
 
 }
 
@@ -86,7 +90,7 @@ function confirm(row) {
 		row.removeChild(Confirm.parentNode);
 	}
 
-	sendText(baza);
+	sendText(baza,row);
 
 
 	for (var i=0;i<3;i++) {
@@ -168,12 +172,71 @@ function freezing(i) {
 
 }
 
-function sendText(baza){
+function sendText(baza,row){
 	var sendtext = new XMLHttpRequest();
 	sendtext.open('POST','/sendText',true);
-	sendtext.send("#"+baza[0]+"#"+baza[1]+"#"+baza[2]);
+	sendtext.send("&row="+(row.rowIndex-1)+"#"+baza[0]+"#"+baza[1]+"#"+baza[2]);
 	sendtext.onreadystatechange = function() {
 	if(this.readyState ==4 && this.status == 200) {
 		}
 	}
+}
+
+function delText(row){
+	var sendtext = new XMLHttpRequest();
+	sendtext.open('POST','/delText',true);
+	sendtext.send("&row="+(row.rowIndex-1));
+	sendtext.onreadystatechange = function() {
+	if(this.readyState ==4 && this.status == 200) {
+		}
+	}
+}
+
+function getBaza(){
+	var sendtext = new XMLHttpRequest();
+	sendtext.open('POST','/getBaza',true);
+	sendtext.send();
+	sendtext.onreadystatechange = function() {
+	if(this.readyState ==4 && this.status == 200) {
+			var answer = sendtext.responseText;
+			fillBaza(answer); 
+		}
+	}
+}
+
+
+function fillBaza(text) {
+
+	var baza = text.split("#");
+	var suda = document.getElementById('tablitsa');	
+
+	for (var rws=0;rws<baza.length-1;rws+=3) {
+
+		var row = suda.insertRow(-1);
+
+		for (var i=rws;i<rws+3;i++) {
+			addCell(row,baza[i]);
+		}
+
+		addCell(row,"Del","input","submit");
+
+		var delButton = row.childNodes[3].childNodes[0];
+		delButton.classList.add("del_btn");
+		delButton.onclick = function() {
+			removeIndex(this);
+		}
+
+		delButton = row.childNodes[3];
+		var trc = document.createElement('input');
+		delButton.appendChild(trc);
+		trc.value = "Edit";
+		trc.type = "submit";
+		trc.classList.add("del_btn");
+		trc.onclick = function() {
+			EditRow(this.parentNode.parentNode,baza);
+		}
+
+	}
+
+
 }
