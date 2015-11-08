@@ -1,7 +1,11 @@
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebSite {
+
+    public static List<Cinema> DataBase = new ArrayList<>();
 
     public static void main(String[] args) throws Throwable{
 
@@ -17,3 +21,4 @@ public class WebSite {
     }
 
 }
+
