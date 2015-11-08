@@ -119,7 +119,13 @@ function confirm(row) {
 }
 
 function EditRow(row,baza) {
-	
+
+	for (var i=2;i>=0;i--) {
+		
+		var Confirm = row.childNodes[i];
+		baza[i]=Confirm.innerHTML;
+	}
+
 	freezing(1);	
 	for (var i=1;i>=0;i--) {
 		var Confirm = row.childNodes[3].childNodes[i];
