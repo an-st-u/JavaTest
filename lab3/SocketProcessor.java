@@ -143,6 +143,25 @@ public class SocketProcessor implements Runnable{
             } else {
                 value_buf = "96,100";
             }
+
+            switch(post) {
+                case "sendText":
+                    value_buf= str.substring(str.indexOf("\r\n\r\n"), str.length());
+                    WebSite.DataBase.add(new Cinema(value_buf));
+                    for (int i=0;i<WebSite.DataBase.size();i++) {
+                        Cinema one = WebSite.DataBase.get(i);
+                        one.showIt();
+                    }
+                    value_buf = "96,100";
+                    break;
+                case "delText":
+                    break;
+                case "getBaza":
+                    break;
+                default:
+                    break;
+            }
+
             System.err.println("Вы прислали: "+value_buf);
             String value;
 
@@ -182,3 +201,4 @@ public class SocketProcessor implements Runnable{
         return get;
     }
 }
+
