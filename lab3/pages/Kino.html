@@ -20,22 +20,19 @@
 <div  id="content">
 <div id="text_2">
 
+<p><input id="add" class="btn" type="submit" value="Добавить" onclick="addRow()"></p>
+
 <table id="tablitsa">
 	<tr>
 		<td>Кинотеатр</td>
 		<td>Адрес</td>
 		<td>Сайт</td>
-		<td>Удалить</td>
+		<td>Действие</td>
 	</tr>
 </table>
 <br>
-<p><b>Введите название, адрес, сайт кинотеатра:</b><br></p>
 
-<br><input type="text" class="vvod" id="name" size="30" value="">
-<input type="text" class="vvod" id="address" size="30" value="">
-<input type="text" class="vvod" id="site" size="30" value="">
-<p><input class="btn" type="submit" value="Добавить" onclick="add()">
-   <input class="btn" type="reset" value="Убрать" onclick="_remove()"></p>
+<p><input id="remall" class="btn" type="reset" value="Убрать последнюю строку" onclick="_remove()"></p>
 
 </div>
 </div>
