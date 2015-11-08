@@ -1,32 +1,43 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+public class Cinema {
 
-public class BazaS {
+    private String name;
+    private String address;
+    private String site;
 
-    private static ArrayList<String> tabl = new ArrayList<>();
+public Cinema(String text) {
 
-
-BazaS(String tabl) {
-
-   String[] s = tabl.split("#");
-    BazaS.tabl.addAll(Arrays.asList(s).subList(1, 3 + 1));
+    String[] s = text.split("#");
+    name =  s[1];
+    address =  s[2];
+    site =  s[3];
 }
 
-public void setTabl(int x, String name) {
-
-    tabl.get(x);
+public void setName(String name) {
+    this.name = name;
 }
 
-public String getTabl(int x) {
-    return tabl.get(x);
+public String getName() {
+    return name;
 }
 
-public void ShowIt() {
+public void setAddress(String address) {
+        this.address = address;
+}
 
-        for (int j = 0; j < tabl.size(); j++) {
-            System.out.print(tabl.get(j) + " ");
-            if ((j+1)%3==0) {System.out.println();}
-        }
+public String getAddress() {
+        return address;
+}
+
+public void setSite(String site) {
+        this.site = site;
+}
+
+public String getSite() {
+        return site;
+}
+    
+public void showIt() {
+    System.out.println(this.name+" "+this.address+" "+this.site+" ");
 }
 
 
