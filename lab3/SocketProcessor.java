@@ -137,47 +137,66 @@ public class SocketProcessor implements Runnable{
 
         try {
 
-            String value_buf;
-            if (str.contains("elem")) {
-                value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
-            } else {
-                value_buf = "96,100";
-            }
-
+            File file = new File(pathD+post);
+            fos = new FileOutputStream(file);
+            String buf;
             switch(post) {
                 case "sendText":
-                    value_buf= str.substring(str.indexOf("\r\n\r\n"), str.length());
-                    WebSite.DataBase.add(new Cinema(value_buf));
-                    for (int i=0;i<WebSite.DataBase.size();i++) {
-                        Cinema one = WebSite.DataBase.get(i);
-                        one.showIt();
-                    }
-                    value_buf = "96,100";
+                    buf= str.substring(str.indexOf("&row=")+5, str.indexOf("#"));
+                    int a = Integer.parseInt(buf, 10);
+                    buf= str.substring(str.indexOf("\r\n\r\n"), str.length());
+                    if (a >= WebSite.DataBase.size())
+                        WebSite.DataBase.add(new Cinema(buf));
+                    else
+                        WebSite.DataBase.set(a, new Cinema(buf));
                     break;
                 case "delText":
+                    buf= str.substring(str.indexOf("&row=") + 5, str.length());
+                    a = Integer.parseInt(buf, 10);
+                    WebSite.DataBase.remove(a);
                     break;
                 case "getBaza":
+                    if (WebSite.DataBase.size()!=0) {
+
+                        for (int i=0;i<WebSite.DataBase.size();i++) {
+                            Cinema value = WebSite.DataBase.get(i);
+                            buf = value.getName()+"#"+value.getAddress()+"#"+value.getSite()+"#";
+                            fos.write(buf.getBytes());
+
+                        }
+                        fos.close();
+                        throw new IOException();
+                    }else {
+                        os.write(("HTTP/1.1 404").getBytes());
+                    }
+                    break;
+                case "sendNOD":
+                    String value_buf;
+                    if (str.contains("elem")) {
+                        value_buf= str.substring(str.indexOf("elem=") + 5, str.length());
+                    } else {
+                        value_buf = "96,100";
+                    }
+                    System.err.println("Вы прислали: "+value_buf);
+                    String value;
+
+                    try {
+                        NOD nod = new NOD(value_buf);
+                        a = nod.getResult();
+                        value = value_buf + " = " + a;
+                    } catch (NumberFormatException e) {
+                        value = "Введите в правильной форме, пожалуйста...";
+                    }
+                    
+                        fos.write(value.getBytes());
+                        fos.close();
+
                     break;
                 default:
                     break;
-            }
+                    }
 
-            System.err.println("Вы прислали: "+value_buf);
-            String value;
 
-            try {
-            NOD nod = new NOD(value_buf);
-            int a = nod.getResult();
-                value = value_buf + " = " + a;
-            } catch (NumberFormatException e) {
-                value = "Введите в правильной форме, пожалуйста...";
-            }
-
-            File file = new File(pathD+post);
-
-            fos = new FileOutputStream(file);
-            fos.write(value.getBytes());
-            fos.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
