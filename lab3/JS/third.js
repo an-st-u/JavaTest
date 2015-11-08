@@ -86,6 +86,8 @@ function confirm(row) {
 		row.removeChild(Confirm.parentNode);
 	}
 
+	sendText(baza);
+
 
 	for (var i=0;i<3;i++) {
 		addCell(row,baza[i]);	
@@ -164,4 +166,14 @@ function freezing(i) {
 
 	}
 
+}
+
+function sendText(baza){
+	var sendtext = new XMLHttpRequest();
+	sendtext.open('POST','/sendText',true);
+	sendtext.send("#"+baza[0]+"#"+baza[1]+"#"+baza[2]);
+	sendtext.onreadystatechange = function() {
+	if(this.readyState ==4 && this.status == 200) {
+		}
+	}
 }
