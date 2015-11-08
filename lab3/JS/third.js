@@ -1,23 +1,44 @@
-function add() {
+function addRow() {
 	
 	var suda = document.getElementById('tablitsa');
 	var name = document.getElementById('name').value;
 	var address = document.getElementById('address').value;
 	var site = document.getElementById('site').value;
-	var tr = document.createElement('tr');
-	tr.innerHTML = '<td>'+name+'</td><td>'+address+'</td>' +
-        '<td><a href="http://'+site+'">'+name+'</a></td>'+
-	'<td><input class="del_btn" type="submit" value="" onclick="removeIndex(this)"></td>';
-	suda.appendChild(tr);
+	
+	var row = suda.insertRow(-1);
+	addCell(row,name); // строка, тип, текст
+	addCell(row,address);
+	addCell(row,site);
+	addCell(row,"","input","submit");
+	
+	var delButton = row.childNodes[3].childNodes[0];
+	delButton.classList.add("del_btn");
+    	delButton.onclick = function() {
+		removeIndex(this);
+	}
 }
+
+function addCell(row, in_text, tag, value_text) {
+
+	var cell = row.insertCell(-1);
+	if (tag) {
+		var elem = document.createElement(tag);
+		elem.type = value_text || null;
+		elem.value = in_text || "";
+		elem.innerHTML = in_text || "";
+		cell.appendChild(elem); }
+	else {
+		cell.innerHTML = in_text || "";
+	}
+	
+}
+
 
 function _remove() {
 		
 	var suda = document.getElementById('tablitsa');
-	//alert(suda.lastElementChild.innerHTML);
-	//alert(suda.childNodes[2].innerHTML)
-	if (suda.lastElementChild!=suda.firstElementChild) {
-	suda.removeChild(suda.lastElementChild);
+	if (suda.rows.length!=1) {
+		suda.deleteRow(-1);
 	}
 }
 
@@ -31,7 +52,7 @@ function сlearDefault(){
 
 function removeIndex(row) {
 
-var suda = document.getElementById('tablitsa');
-suda.removeChild(row.parentNode.parentNode);
+	var suda = document.getElementById('tablitsa');
+	suda.deleteRow(row.parentNode.parentNode.rowIndex);
 
 }
