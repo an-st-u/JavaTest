@@ -129,7 +129,7 @@ tr:hover {
 
 td {
 	border: 1px solid #454545;
-	padding: 2px 5px;
+	padding: 2px 4px;
 	width: 250px;
 	height:24px;
 
@@ -137,7 +137,7 @@ td {
 
 td:last-child {
 
-	width: 100px;
+	width: 120px;
 
 }
 
@@ -147,6 +147,7 @@ td:last-child {
 
 	height:24px;
 	border: 1px solid #454545;
+	background-color: #fdfcfc;
 
 }
 
@@ -157,8 +158,8 @@ td:last-child {
 	color: #cccccc;
 	background: #606060;
 	height: 18px;
-	width: 24px;
-	margin: 3px auto;
+	width: 40px;
+	margin: 3px 1px;
 	text-decoration: none;
 }
 
