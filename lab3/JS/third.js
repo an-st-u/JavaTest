@@ -6,14 +6,13 @@ function addRow() {
 	var suda = document.getElementById('tablitsa');
 	
 	var row = suda.insertRow(-1);
-	addCellInput(row,"","text"); // строка, тип, текст
-	addCellInput(row,"","text");
-	addCellInput(row,"","text");
-	addCell(row,"Save","input","submit");
+	addCell(row,"","input","text","vvod_kino"); // строка, текст, тэг, тип, класс
+	addCell(row,"","input","text","vvod_kino");
+	addCell(row,"","input","text","vvod_kino");
+	addCell(row,"Save","input","submit","del_btn");
 
 
 	var Confirm = row.childNodes[3].childNodes[0];
-	Confirm.classList.add("del_btn");
     	Confirm.onclick = function() {
 		confirm(this.parentNode.parentNode);
 		freezing(0);
@@ -21,25 +20,14 @@ function addRow() {
 
 }
 
-function addCellInput(row, in_text, type_text,id) {
-
-	var cell = row.insertCell(-1);
-	var elem = document.createElement("input");
-	elem.classList.add("vvod");
-	elem.size = 25;
-	elem.type = type_text || null;
-	elem.value = in_text || "";
-	elem.innerHTML = in_text || "";
-	cell.appendChild(elem); 
-
-}
 
 
-function addCell(row, in_text, tag, type_text) {
+function addCell(row, in_text, tag, type_text, uclass) {
 
 	var cell = row.insertCell(-1);
 	if (tag) {
 		var elem = document.createElement(tag);
+		elem.classList.add(uclass);
 		elem.type = type_text || null;
 		elem.value = in_text || "";
 		elem.innerHTML = in_text || "";
@@ -94,13 +82,12 @@ function confirm(row) {
 
 
 	for (var i=0;i<3;i++) {
-		addCell(row,baza[i]);	
+		addCell(row,baza[i]);
 	}
 
-	addCell(row,"Del","input","submit");
+	addCell(row,"Del","input","submit","del_btn");
 
 	var delButton = row.childNodes[3].childNodes[0];
-	delButton.classList.add("del_btn");
     	delButton.onclick = function() {
 		removeIndex(this);
 	}
@@ -127,11 +114,6 @@ function EditRow(row,baza) {
 	}
 
 	freezing(1);	
-	for (var i=1;i>=0;i--) {
-		var Confirm = row.childNodes[3].childNodes[i];
-		Confirm.parentNode.removeChild(Confirm);
-	}
-
 	
 	for (var i=3;i>=0;i--) {
 		
@@ -140,10 +122,10 @@ function EditRow(row,baza) {
 	}
 
 	for (var i=0;i<3;i++) {
-		addCellInput(row,baza[i],"text");
+		addCell(row,baza[i],"input","text","vvod_kino");
 	}
 
-	addCell(row,"Save","input","submit");
+	addCell(row,"Save","input","submit","del_btn");
 
 
 	var Confirm = row.childNodes[3].childNodes[0];
