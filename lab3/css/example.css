@@ -143,11 +143,17 @@ td:last-child {
 
 
 
-.vvod{
+.vvod, .vvod_kino{
 
 	height:24px;
 	border: 1px solid #454545;
 	background-color: #fdfcfc;
+
+}
+
+.vvod_kino{
+
+	width: 100%;
 
 }
 
