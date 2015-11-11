@@ -42,6 +42,7 @@ function addCell(row, in_text, tag, type_text, uclass) {
 function _remove() {
 		
 	var suda = document.getElementById('tablitsa');
+	delText(suda.rows.length-1);
 	if (suda.rows.length!=1) {
 		suda.deleteRow(-1);
 	}
@@ -153,7 +154,7 @@ function freezing(i) {
 		}
 		cold2.value = "Убрать последнюю строку";
 		cold2.onclick = function() {
-		_remove();
+		_remove(this);
 		}
 
 	}
