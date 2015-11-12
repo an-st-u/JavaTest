@@ -10,7 +10,7 @@ public class SocketProcessor implements Runnable{
     private String almostFile;
     private String numbers = "200 OK";
     String pathD = "\\JavaServer\\";
-    
+
     public SocketProcessor(Socket s) throws Throwable {
 
         sockets = s;
@@ -18,7 +18,7 @@ public class SocketProcessor implements Runnable{
         this.os = s.getOutputStream();
 
     }
-    
+
     public void run() {
 
         try {
@@ -44,7 +44,7 @@ public class SocketProcessor implements Runnable{
                 get = "Был получен не GET или POST запрос";
                 sendGet(get);
             }
-            
+
         }   catch (NullPointerException e) {
             System.out.print("");
         }    catch (IOException e) {
@@ -74,7 +74,7 @@ public class SocketProcessor implements Runnable{
         return first;
 
     }
-    
+
     private String typeFunction(String get){
 
         String typeOfFile = get.substring(get.indexOf(".") + 1, get.lastIndexOf(""));
@@ -115,12 +115,14 @@ public class SocketProcessor implements Runnable{
                 case "getBaza":
                     if (WebSite.DataBase.size()!=0) {
 
+                        almostFile ="";
                         for (int i=0;i<WebSite.DataBase.size();i++) {
                             Cinema value = WebSite.DataBase.get(i);
                             buf = value.getName()+"#"+value.getAddress()+"#"+value.getSite()+"#";
                             almostFile += buf;
-
                         }
+                        almostFile +="";
+
                     }else {
                         numbers = "404 NOT FOUND";
                     }
