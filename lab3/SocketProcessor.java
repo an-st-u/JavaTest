@@ -7,10 +7,10 @@ public class SocketProcessor implements Runnable{
     private InputStream is;
     private OutputStream os;
     FileInputStream fis;
-    FileOutputStream fos;
-    String pathD = "C:\\JavaServer\\";
-
-
+    private String almostFile;
+    private String numbers = "200 OK";
+    String pathD = "\\JavaServer\\";
+    
     public SocketProcessor(Socket s) throws Throwable {
 
         sockets = s;
@@ -18,70 +18,33 @@ public class SocketProcessor implements Runnable{
         this.os = s.getOutputStream();
 
     }
-
-
+    
     public void run() {
 
         try {
 
-            String numbers = "200 OK";
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            char[] buf = new char[16<<10];
+            char[] buf = new char[16*1024];
             int n = br.read(buf);
-
             String str = new String(buf,0,n);
 
-            System.out.println("Было получено:\n"+str);
-            System.out.println("_____________");
-
+            System.out.println("Было получено:\n"+str+"\n_____________");
             String get = firstLine(str);
 
             if (get.startsWith("GET")) {
-                get = afterGet(get);
+                get = afterZapros(get);
+                sendGet(get);
+
             } else if (get.startsWith("POST")) {
-                get = afterGet(get);
+                get = afterZapros(get);
                 afterPost(str,get);
+                sendPost(get);
             } else {
                 get = "Был получен не GET или POST запрос";
+                sendGet(get);
             }
-
-
-            if (get.trim().length()==0)
-                get = "index.html";
-            File file = new File(pathD+get);
-            if (!file.exists()) {
-                get = "404.html";
-                numbers="404 Not Found";
-            }
-            file = new File(pathD+get);
-
-
-            String answer = "HTTP/1.1 "+numbers+"\r\n" +
-                    "Server: Brig207\r\n" +
-                    "Content-Type: "+ typeFunction(get) +"; charset=UTF-8\r\n" +
-                    "Content-Length: " + file.length() + "\r\n" +
-                    "Connection: close\r\n\r\n";
-
-            System.out.println("Отправлено:\n"+answer);
-            os.write(answer.getBytes());
-
-            fis = new FileInputStream(file);
-            byte[] bBuf = new byte[32<<10];
-
-            while (true){
-
-                n=fis.read(bBuf);
-                if (n>0)
-                    os.write(bBuf);
-                else
-                    break;
-
-            }
-            fis.close();
-
-            os.flush();
-
+            
         }   catch (NullPointerException e) {
             System.out.print("");
         }    catch (IOException e) {
@@ -111,9 +74,7 @@ public class SocketProcessor implements Runnable{
         return first;
 
     }
-
-
-
+    
     private String typeFunction(String get){
 
         String typeOfFile = get.substring(get.indexOf(".") + 1, get.lastIndexOf(""));
@@ -135,10 +96,6 @@ public class SocketProcessor implements Runnable{
     }
     private void afterPost(String str,String post){
 
-        try {
-
-            File file = new File(pathD+post);
-            fos = new FileOutputStream(file);
             String buf;
             switch(post) {
                 case "sendText":
@@ -161,13 +118,11 @@ public class SocketProcessor implements Runnable{
                         for (int i=0;i<WebSite.DataBase.size();i++) {
                             Cinema value = WebSite.DataBase.get(i);
                             buf = value.getName()+"#"+value.getAddress()+"#"+value.getSite()+"#";
-                            fos.write(buf.getBytes());
+                            almostFile += buf;
 
                         }
-                        fos.close();
-                        throw new IOException();
                     }else {
-                        os.write(("HTTP/1.1 404").getBytes());
+                        numbers = "404 NOT FOUND";
                     }
                     break;
                 case "sendNOD":
@@ -178,34 +133,22 @@ public class SocketProcessor implements Runnable{
                         value_buf = "96,100";
                     }
                     System.err.println("Вы прислали: "+value_buf);
-                    String value;
 
                     try {
                         NOD nod = new NOD(value_buf);
                         a = nod.getResult();
-                        value = value_buf + " = " + a;
+                        almostFile = value_buf + " = " + a;
                     } catch (NumberFormatException e) {
-                        value = "Введите в правильной форме, пожалуйста...";
+                        almostFile = "Введите в правильной форме, пожалуйста...";
                     }
-                    
-                        fos.write(value.getBytes());
-                        fos.close();
 
                     break;
                 default:
                     break;
                     }
-
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println();
-        }
     }
 
-    private String afterGet(String get){
+    private String afterZapros(String get){
 
             get = get.substring(get.indexOf("/") + 1, get.lastIndexOf(" "));
             if (get.endsWith("/")) {
@@ -216,8 +159,64 @@ public class SocketProcessor implements Runnable{
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+            if (get.trim().length()==0)
+            get = "index.html";
 
         return get;
     }
-}
 
+    private void sendGet(String get) {
+
+        try {
+
+            File file = new File(pathD + get);
+            if (!file.exists()) {
+                get = "404.html";
+                numbers = "404 NOT FOUND";
+            }
+            file = new File(pathD + get);
+
+            String answer = "HTTP/1.1 "+numbers+"\r\n" +
+                    "Content-Type: "+ typeFunction(get) +"; charset=UTF-8\r\n" +
+                    "Content-Length: " + file.length() + "\r\n" +
+                    "Connection: close\r\n\r\n";
+
+            System.out.println("Отправлено:\n" + answer);
+            os.write(answer.getBytes());
+
+            fis = new FileInputStream(file);
+
+            byte[] bBuf = new byte[32 * 1024];
+
+            while (true) {
+                int n = fis.read(bBuf);
+                if (n > 0)
+                    os.write(bBuf);
+                else
+                break;
+
+            }
+            fis.close();
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    } private void sendPost(String get) {
+        try {
+            int num = Integer.parseInt(numbers.substring(0, 2), 10);
+            if (num != 404) {
+                String answer = "HTTP/1.1 " + numbers + "\r\n" +
+                        "Content-Type: " + typeFunction(get) + "; charset=UTF-8\r\n" +
+                        "Content-Length: " + almostFile.length() + "\r\n" +
+                        "Connection: close\r\n\r\n";
+                os.write(answer.getBytes());
+                os.write(almostFile.getBytes());
+            } else {
+                sendGet(get);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
